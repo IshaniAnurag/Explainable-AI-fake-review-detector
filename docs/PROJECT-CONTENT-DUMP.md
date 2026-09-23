@@ -1,7 +1,7 @@
 # An Explainable AI Framework for Detecting Fake E-Commerce Reviews — Project Content Dump (Phase 1 Build)
 
 > [!NOTE]
-> **Document Purpose**: Raw technical content dump for Phase 1 (pre-AWS) execution. This document contains comprehensive implementation details, empirical metrics, theoretical formulas, system architecture, and reference lists to be converted into an IEEE conference paper format for project review.
+> **Document Purpose**: Raw technical content dump for Phase 1 (pre-AWS) execution. This document contains comprehensive implementation details, empirical metrics from the full 40,432-row Kaggle dataset, theoretical formulas, system architecture, and reference lists to be converted into an IEEE conference paper format for project review.
 
 ---
 
@@ -11,7 +11,7 @@
 An Explainable AI Framework for Detecting Fake E-Commerce Reviews
 
 ### Summary
-Online e-commerce platforms are increasingly inundated with artificial, computer-generated, or incentivized fake reviews that manipulate consumer purchasing decisions and undermine seller credibility. This project implements an end-to-end Explainable AI (XAI) framework that classifies review text as genuine or fake while exposing fine-grained token-level attributions. The core classification pipeline fine-tunes a `distilbert-base-uncased` transformer model alongside a TF-IDF + Logistic Regression baseline on a balanced dataset of ~40,000 Amazon e-commerce reviews. Explainability is integrated using SHapley Additive exPlanations (SHAP), producing word-level importance scores that highlight specific deceptive markers versus authentic linguistic cues. The system features a production-ready FastAPI backend paired with an interactive React (Vite) + Tailwind CSS + Framer Motion frontend for real-time inference and XAI visualization.
+Online e-commerce platforms are increasingly inundated with artificial, computer-generated, or incentivized fake reviews that manipulate consumer purchasing decisions and undermine seller credibility. This project implements an end-to-end Explainable AI (XAI) framework that classifies review text as genuine or fake while exposing fine-grained token-level attributions. The core classification pipeline fine-tunes a `distilbert-base-uncased` transformer model alongside a TF-IDF + Logistic Regression baseline on the full Kaggle "Fake Reviews Dataset" (~40,432 Amazon e-commerce reviews). Explainability is integrated using SHapley Additive exPlanations (SHAP), producing word-level importance scores that highlight specific deceptive markers versus authentic linguistic cues. The system features a production-ready FastAPI backend paired with an interactive React (Vite) + Tailwind CSS + Framer Motion frontend for real-time inference and XAI visualization.
 
 ---
 
@@ -31,7 +31,7 @@ Online e-commerce platforms are increasingly inundated with artificial, computer
 - **E-Commerce Deception Impact**: Consumers rely heavily on user-generated star ratings and text reviews. Computer-generated (CG) spam and incentivized false positive reviews distort product quality perceptions.
 - **The Black-Box Dilemma**: Traditional deep learning models (e.g., standard BERT or LSTM variants) achieve high prediction accuracy but fail to provide auditability. Merchants and security analysts cannot inspect *why* a review was flagged.
 - **Proposed Solution**: An integrated pipeline combining lightweight transformer sequence classification (`distilbert-base-uncased`) with SHAP token attribution.
-- **Phase 1 Execution Guarantee**: Complete functional system built, benchmarked, and deployed locally and via web frontend without any AWS billing exposure or cloud vendor lock-in.
+- **Phase 1 Execution Guarantee**: Complete functional system built, benchmarked on full dataset, and deployed locally and via web frontend without any AWS billing exposure or cloud vendor lock-in.
 
 ---
 
@@ -130,27 +130,27 @@ $$\phi_i(v) = \sum_{S \subseteq N \setminus \{i\}} \frac{|S|!(|N| - |S| - 1)!}{|
 
 ---
 
-## 8. Empirical Results
+## 8. Empirical Results (Full 40,432 Row Benchmark)
 
-### 8.1 Quantitative Model Benchmarks (Held-Out Test Set)
+### 8.1 Quantitative Model Benchmarks (Held-Out Test Set: 4,044 Rows)
 
 | Model | Accuracy | Precision | Recall | F1 Score | ROC-AUC |
 | :--- | :---: | :---: | :---: | :---: | :---: |
-| **Baseline (TF-IDF + LogReg)** | 86.40% | 85.90% | 87.10% | 86.49% | 0.9340 |
+| **Baseline (TF-IDF + LogReg)** | 93.32% | 94.11% | 92.43% | 93.26% | 0.9828 |
 | **DistilBERT (Fine-Tuned)** | **96.80%** | **96.50%** | **97.10%** | **96.80%** | **0.9940** |
 
-### 8.2 Confusion Matrix (DistilBERT on 4,044 Test Samples)
-- **True Negatives (TN - Genuine Correct)**: 1,948
-- **False Positives (FP - Genuine as Fake)**: 73
-- **False Negatives (FN - Fake as Genuine)**: 56
-- **True Positives (TP - Fake Correct)**: 1,967
+### 8.2 Confusion Matrix (Baseline Model on 4,044 Test Samples)
+- **True Negatives (TN - Genuine Correct)**: 1,905
+- **False Positives (FP - Genuine as Fake)**: 117
+- **False Negatives (FN - Fake as Genuine)**: 153
+- **True Positives (TP - Fake Correct)**: 1,869
 
 ### 8.3 Saved Representative SHAP Examples Summary
-1. **True Positive**: *"THIS IS ABSOLUTELY AMAZING! Best product ever created! 10/10 must buy right now!"* — High positive SHAP scores on `"AMAZING"`, `"10/10"`, `"must buy"`. Verdict: Fake (98.4% confidence).
-2. **True Negative**: *"I bought this pair of shoes 3 months ago. The leather feels durable and fits well..."* — Negative SHAP scores on `"bought"`, `"3 months ago"`, `"durable"`. Verdict: Genuine (96.2% confidence).
-3. **False Positive**: *"Oh my goodness I am totally in love with this sweater! Best gift I have ever received..."* — High praise tokens triggered false positive flag. Verdict: Fake (62.1% confidence).
-4. **False Negative**: *"The item was delivered on time and works as described in the catalog."* — Neutral language masked synthetic origin. Verdict: Genuine (54.3% confidence).
-5. **Ambiguous Case**: *"Product is fine for the price. Not terrible but definitely not high quality."* — Balanced positive and negative tokens. Verdict: Fake (51.2% confidence).
+1. **True Positive**: *"THIS IS ABSOLUTELY AMAZING! Best product ever created! 10/10 must buy right now!"* — High positive SHAP scores on `"AMAZING"`, `"10/10"`, `"must buy"`. Verdict: Fake.
+2. **True Negative**: *"I bought this pair of shoes 3 months ago. The leather feels durable and fits well..."* — Negative SHAP scores on `"bought"`, `"3 months ago"`, `"durable"`. Verdict: Genuine.
+3. **False Positive**: *"Oh my goodness I am totally in love with this sweater! Best gift I have ever received..."* — High praise tokens triggered false positive flag. Verdict: Fake.
+4. **False Negative**: *"The item was delivered on time and works as described in the catalog."* — Neutral language masked synthetic origin. Verdict: Genuine.
+5. **Ambiguous Case**: *"Product is fine for the price. Not terrible but definitely not high quality."* — Balanced positive and negative tokens. Verdict: Fake.
 
 ---
 
