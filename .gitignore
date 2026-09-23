@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+*.env
+
+# Machine Learning Artifacts & Data
+ml/data/*.csv
+ml/data/*.json
+ml/models/*.joblib
+ml/models/*.pt
+ml/models/*.bin
+ml/models/*.safetensors
+ml/models/distilbert_fake_reviews/
+ml/models/saved_shap_examples.json
+
+# Backend
+backend/*.db
+backend/*.sqlite3
+backend/app/__pycache__/
+
+# Node / Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.venv/
+.ds_store
+.vscode/
+.idea/
