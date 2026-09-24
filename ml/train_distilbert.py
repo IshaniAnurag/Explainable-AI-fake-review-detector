@@ -4,10 +4,10 @@ import torch
 import pandas as pd
 import numpy as np
 from torch.utils.data import Dataset, DataLoader
+from torch.optim import AdamW
 from transformers import (
     AutoTokenizer,
     AutoModelForSequenceClassification,
-    AdamW,
     get_linear_schedule_with_warmup
 )
 from sklearn.metrics import (
@@ -23,14 +23,14 @@ METRICS_OUTPUT_PATH = os.path.join(MODELS_DIR, "distilbert_metrics.json")
 os.makedirs(MODELS_DIR, exist_ok=True)
 
 MODEL_NAME = "distilbert-base-uncased"
-MAX_LEN = 256
-BATCH_SIZE = 16
-LEARNING_RATE = 2e-5
-EPOCHS = 3
+MAX_LEN = 128         # Optimized for fast CPU tokenization & self-attention
+BATCH_SIZE = 32       # Larger batch size for fast CPU vectorization
+LEARNING_RATE = 3e-5
+EPOCHS = 2            # 2 fast epochs for quick convergence
 WEIGHT_DECAY = 0.01
 
 class ReviewDataset(Dataset):
-    def __init__(self, texts, labels, tokenizer, max_len=256):
+    def __init__(self, texts, labels, tokenizer, max_len=128):
         self.texts = list(texts)
         self.labels = list(labels)
         self.tokenizer = tokenizer
@@ -100,8 +100,10 @@ def evaluate(model, dataloader, device):
     }
 
 def train():
+    # Set PyTorch thread count for speed
+    torch.set_num_threads(max(1, os.cpu_count() - 1))
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"Using device: {device}")
+    print(f"Using device: {device} (Thread count: {torch.get_num_threads()})")
 
     train_path = os.path.join(DATA_DIR, "train.csv")
     val_path = os.path.join(DATA_DIR, "val.csv")
@@ -114,11 +116,12 @@ def train():
     val_df = pd.read_csv(val_path)
     test_df = pd.read_csv(test_path)
 
-    # Subsample if local CPU to ensure training completes within reasonable time
-    if device.type == "cpu" and len(train_df) > 8000:
-        print(f"CPU detected: Subsampling training dataset from {len(train_df)} to 8000 rows for smooth local execution.")
-        train_df = train_df.sample(n=8000, random_state=42).reset_index(drop=True)
-        val_df = val_df.sample(n=1000, random_state=42).reset_index(drop=True)
+    # Subsample 2500 samples for ultra-fast local fine-tuning
+    if len(train_df) > 2500:
+        print(f"Subsampling training dataset from {len(train_df)} to 2,500 rows for ultra-fast fine-tuning.")
+        train_df = train_df.sample(n=2500, random_state=42).reset_index(drop=True)
+        val_df = val_df.sample(n=500, random_state=42).reset_index(drop=True)
+        test_df = test_df.sample(n=500, random_state=42).reset_index(drop=True)
 
     print(f"Initializing tokenizer & model: {MODEL_NAME}...")
     tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
@@ -137,7 +140,7 @@ def train():
     total_steps = len(train_loader) * EPOCHS
     scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=int(total_steps * 0.1), num_training_steps=total_steps)
 
-    print(f"Starting training for {EPOCHS} epochs (Total steps: {total_steps})...")
+    print(f"Starting ultra-fast fine-tuning for {EPOCHS} epochs (Total steps: {total_steps})...")
 
     best_val_loss = float("inf")
 
@@ -161,7 +164,7 @@ def train():
 
             total_train_loss += loss.item()
 
-            if (step + 1) % 100 == 0 or (step + 1) == len(train_loader):
+            if (step + 1) % 25 == 0 or (step + 1) == len(train_loader):
                 print(f"Epoch {epoch}/{EPOCHS} | Step {step+1}/{len(train_loader)} | Batch Loss: {loss.item():.4f}")
 
         avg_train_loss = total_train_loss / len(train_loader)
@@ -192,6 +195,7 @@ def train():
         "test_metrics": test_metrics
     }
 
+    print("\n--- DISTILBERT FINAL TEST METRICS ---")
     print(json.dumps(metrics_output, indent=2))
 
     with open(METRICS_OUTPUT_PATH, "w") as f:
