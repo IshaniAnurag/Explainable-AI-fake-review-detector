@@ -10,9 +10,9 @@
 
 | Phase | Milestone | Status | Key Deliverables |
 | :---: | :--- | :---: | :--- |
-| **Phase 1** | **Audit & Project Setup** | **IN PROGRESS** | `AUDIT.md`, `PROGRESS.md`, git baseline, environment setup |
-| **Phase 2** | **Data & Baseline Verification** | PENDING | EDA plots, verified baseline metrics, confusion matrix, ROC curve in `/results` |
-| **Phase 3** | **DistilBERT, Real XAI (SHAP & LIME), & ONNX** | PENDING | Real DistilBERT model, real SHAP, real LIME, faithfulness/stability tests, ONNX export |
+| **Phase 1** | **Audit & Project Setup** | **DONE** | `AUDIT.md`, `PROGRESS.md`, git baseline, environment setup |
+| **Phase 2** | **Data & Baseline Verification** | **DONE** | EDA plots, verified baseline metrics, confusion matrix, ROC curve, ablation in `/results` |
+| **Phase 3** | **DistilBERT, Real XAI (SHAP & LIME), & ONNX** | **IN PROGRESS** | Real DistilBERT model, real SHAP, real LIME, faithfulness/stability tests, ONNX export |
 | **Phase 4** | **Backend & DynamoDB Repository Layer** | PENDING | Versioned `/v1` endpoints, DynamoDB Local/AWS repo, batch upload, rate limiting |
 | **Phase 5** | **Frontend Modernization & Full Views** | PENDING | Landing, Analyzer (SHAP/LIME + dual model), History, Insights, Batch Upload, Dark/Light mode |
 | **Phase 6** | **Quality Assurance, CI & Testing** | PENDING | Pytest unit/integration tests, GitHub Actions CI workflow, `.env.example`, README |
@@ -27,14 +27,15 @@
 - [x] Comprehensive workspace inspection across ML, backend, frontend, docs
 - [x] Generate truthful `AUDIT.md` identifying mocked and incomplete subsystems
 - [x] Create running `PROGRESS.md`
-- [ ] Check / setup GitHub repository and git branches
-- [ ] Install required dependencies (`lime`, `shap`, `onnx`, `onnxruntime`, `mangum`, `boto3`, `pytest`, `matplotlib`, `seaborn`)
+- [x] Switched branch to `main`
+- [x] Install required dependencies (`lime`, `shap`, `onnx`, `onnxruntime`, `mangum`, `boto3`, `pytest`, `matplotlib`, `seaborn`)
 
 ### Phase 2: Data & Baseline Verification
-- [ ] Verify 40,432-row Kaggle dataset integrity, class distribution, and clean splits
-- [ ] Compute full dataset EDA statistics and generate class balance/length distribution plots
-- [ ] Train/verify TF-IDF + Logistic Regression / Linear SVM baseline
-- [ ] Save authentic baseline confusion matrix, ROC curve, and classification report to `/results`
+- [x] Verify 40,432-row Kaggle dataset integrity, class distribution, and clean splits
+- [x] Compute full dataset EDA statistics and generate class balance/length distribution plots (PNG 300 DPI & SVG)
+- [x] Train and verify TF-IDF + Logistic Regression (93.67% Acc, 0.9842 AUC) and Calibrated Linear SVM (94.11% Acc, 0.9857 AUC)
+- [x] Run 8-configuration ablation study across n-gram ranges and max features caps
+- [x] Save authentic baseline confusion matrix, ROC curves, EDA stats, and ablation tables to `/results` and `/docs/figures`
 
 ### Phase 3: DistilBERT, Real XAI (SHAP & LIME), & ONNX
 - [ ] Fine-tune sequence classifier on preprocessed review corpus with evaluation checkpoints

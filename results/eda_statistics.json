@@ -1,0 +1,29 @@
+{
+  "dataset_name": "Kaggle Fake Reviews Dataset (Amazon Product Reviews)",
+  "total_rows": 40432,
+  "train_rows": 32345,
+  "val_rows": 4043,
+  "test_rows": 4044,
+  "class_balance": {
+    "genuine_count": 20216,
+    "fake_count": 20216,
+    "genuine_pct": 50.0,
+    "fake_pct": 50.0
+  },
+  "length_statistics": {
+    "genuine_reviews": {
+      "mean_words": 73.61,
+      "median_words": 42.0,
+      "std_words": 76.02,
+      "max_words": 373,
+      "min_words": 5
+    },
+    "fake_reviews": {
+      "mean_words": 61.26,
+      "median_words": 35.0,
+      "std_words": 61.81,
+      "max_words": 318,
+      "min_words": 1
+    }
+  }
+}
