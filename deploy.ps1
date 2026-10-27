@@ -1,4 +1,7 @@
 # TrustLens XAI - Automated Zero-Cost Cloud Deployment Script
+# Automatically refresh PATH from Windows registry so new installations are seen immediately
+$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+
 Write-Host "==========================================================" -ForegroundColor Cyan
 Write-Host "   TrustLens XAI - Zero-Cost AWS Serverless Deployment    " -ForegroundColor Cyan
 Write-Host "==========================================================" -ForegroundColor Cyan

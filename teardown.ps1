@@ -1,4 +1,7 @@
 # TrustLens XAI - Automated Cloud Teardown and Cleanup Script
+# Automatically refresh PATH from Windows registry so new installations are seen immediately
+$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+
 Write-Host "==========================================================" -ForegroundColor Yellow
 Write-Host "     TrustLens XAI - Automated AWS Teardown and Cleanup   " -ForegroundColor Yellow
 Write-Host "==========================================================" -ForegroundColor Yellow
