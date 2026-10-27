@@ -28,6 +28,8 @@ class ModelLoaderService:
                 self.vectorizer = self.baseline_data.get("vectorizer")
                 self.classifier = self.baseline_data.get("classifier")
                 if self.vectorizer and self.classifier:
+                    if not hasattr(self.classifier, "multi_class"):
+                        self.classifier.multi_class = "auto"
                     self.vocabulary = self.vectorizer.vocabulary_
                     self.coefs = self.classifier.coef_[0]
                     self.is_loaded = True
@@ -47,11 +49,20 @@ class ModelLoaderService:
         fake_prob = 0.50
         if self.is_loaded and self.vectorizer and self.classifier:
             try:
+                if not hasattr(self.classifier, "multi_class"):
+                    self.classifier.multi_class = "auto"
                 X = self.vectorizer.transform([text])
                 probs = self.classifier.predict_proba(X)[0]
                 fake_prob = float(probs[1])
             except Exception as e:
                 print(f"Inference computation error: {e}")
+                try:
+                    w = self.classifier.coef_[0]
+                    b = float(self.classifier.intercept_[0]) if hasattr(self.classifier, 'intercept_') else 0.0
+                    z = float(X.dot(w)[0] + b)
+                    fake_prob = float(1.0 / (1.0 + np.exp(-z)))
+                except Exception as inner_e:
+                    print(f"Direct logit fallback error: {inner_e}")
 
         # Determine verdict based on threshold 0.50
         verdict = "Fake" if fake_prob >= 0.50 else "Genuine"
