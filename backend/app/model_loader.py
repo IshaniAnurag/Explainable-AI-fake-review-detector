@@ -4,7 +4,9 @@ import numpy as np
 from typing import Dict, Any, List
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-BASELINE_PATH = os.path.join(BASE_DIR, "ml", "models", "baseline_model.joblib")
+LOCAL_MODEL_PATH = os.path.join(os.path.dirname(__file__), "baseline_model.joblib")
+FALLBACK_BASELINE_PATH = os.path.join(BASE_DIR, "ml", "models", "baseline_model.joblib")
+BASELINE_PATH = LOCAL_MODEL_PATH if os.path.exists(LOCAL_MODEL_PATH) else FALLBACK_BASELINE_PATH
 
 class ModelLoaderService:
     def __init__(self):
@@ -20,8 +22,9 @@ class ModelLoaderService:
     def _load_models(self):
         """Load trained classification pipeline artifacts."""
         try:
-            if os.path.exists(BASELINE_PATH):
-                self.baseline_data = joblib.load(BASELINE_PATH)
+            target_path = LOCAL_MODEL_PATH if os.path.exists(LOCAL_MODEL_PATH) else FALLBACK_BASELINE_PATH
+            if os.path.exists(target_path):
+                self.baseline_data = joblib.load(target_path)
                 self.vectorizer = self.baseline_data.get("vectorizer")
                 self.classifier = self.baseline_data.get("classifier")
                 if self.vectorizer and self.classifier:

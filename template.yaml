@@ -1,0 +1,167 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  TrustLens XAI — Zero-Spend Serverless Architecture
+  Deploys FastAPI on AWS Lambda, API Gateway v2, DynamoDB on-demand, S3, and CloudFront with OAC.
+
+Globals:
+  Function:
+    Timeout: 29
+    MemorySize: 512
+    Runtime: python3.11
+    Architectures:
+      - arm64
+
+Resources:
+  # ------------------------------------------------------------
+  # 1. API Gateway (HTTP API v2)
+  # ------------------------------------------------------------
+  ReviewHttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      Name: TrustLens-HttpApi
+      CorsConfiguration:
+        AllowOrigins:
+          - '*'
+        AllowHeaders:
+          - '*'
+        AllowMethods:
+          - GET
+          - POST
+          - OPTIONS
+
+  # ------------------------------------------------------------
+  # 2. Serverless Compute: FastAPI on AWS Lambda (Mangum ASGI)
+  # ------------------------------------------------------------
+  BackendFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: TrustLens-BackendFunction
+      CodeUri: backend/
+      Handler: app.main.handler
+      Environment:
+        Variables:
+          USE_DYNAMODB: 'true'
+          DYNAMODB_TABLE: !Ref SubmissionsTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref SubmissionsTable
+      Events:
+        ProxyRoute:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref ReviewHttpApi
+            Path: /{proxy+}
+            Method: ANY
+        RootRoute:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref ReviewHttpApi
+            Path: /
+            Method: ANY
+
+  # ------------------------------------------------------------
+  # 3. Serverless Persistence: Amazon DynamoDB (On-Demand Mode)
+  # ------------------------------------------------------------
+  SubmissionsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: TrustLens-AnalysisHistory
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: reviewId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: reviewId
+          KeyType: HASH
+
+  # ------------------------------------------------------------
+  # 4. Static Hosting: Amazon S3 Private Bucket
+  # ------------------------------------------------------------
+  FrontendBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'trustlens-frontend-${AWS::AccountId}-${AWS::Region}'
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  # ------------------------------------------------------------
+  # 5. Global CDN & Security: CloudFront with Origin Access Control (OAC)
+  # ------------------------------------------------------------
+  CloudFrontOAC:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig:
+        Name: TrustLensOriginAccessControl
+        OriginAccessControlOriginType: s3
+        SigningBehavior: always
+        SigningProtocol: sigv4
+
+  CloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Comment: TrustLens XAI Global CDN
+        Enabled: true
+        DefaultRootObject: index.html
+        Origins:
+          - Id: S3FrontendOrigin
+            DomainName: !GetAtt FrontendBucket.RegionalDomainName
+            OriginAccessControlId: !GetAtt CloudFrontOAC.Id
+            S3OriginConfig:
+              OriginAccessIdentity: ''
+        DefaultCacheBehavior:
+          TargetOriginId: S3FrontendOrigin
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods:
+            - GET
+            - HEAD
+            - OPTIONS
+          CachedMethods:
+            - GET
+            - HEAD
+          ForwardedValues:
+            QueryString: false
+            Cookies:
+              Forward: none
+        CustomErrorResponses:
+          - ErrorCode: 403
+            ResponseCode: 200
+            ResponsePagePath: /index.html
+          - ErrorCode: 404
+            ResponseCode: 200
+            ResponsePagePath: /index.html
+
+  FrontendBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref FrontendBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: AllowCloudFrontServicePrincipalReadOnly
+            Effect: Allow
+            Principal:
+              Service: cloudfront.amazonaws.com
+            Action: s3:GetObject
+            Resource: !Sub '${FrontendBucket.Arn}/*'
+            Condition:
+              StringEquals:
+                AWS:SourceArn: !Sub 'arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}'
+
+Outputs:
+  ApiUrl:
+    Description: HTTP API Gateway Endpoint URL for Backend API
+    Value: !Sub 'https://${ReviewHttpApi}.execute-api.${AWS::Region}.amazonaws.com'
+  CloudFrontUrl:
+    Description: Live Public CloudFront URL for React Dashboard
+    Value: !Sub 'https://${CloudFrontDistribution.DomainName}'
+  S3BucketName:
+    Description: S3 Static Website Bucket Name
+    Value: !Ref FrontendBucket
+  DynamoDBTableName:
+    Description: DynamoDB Table Name for Storing Review Audits
+    Value: !Ref SubmissionsTable
