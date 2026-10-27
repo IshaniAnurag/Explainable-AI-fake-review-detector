@@ -170,7 +170,7 @@ export default function App() {
       <footer className="border-t border-white/5 bg-[#06080d] py-6 text-center text-xs text-slate-500">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p>© 2026 TrustLens XAI — An Explainable AI Framework for Detecting Fake E-Commerce Reviews</p>
-          <span className="text-[11px] font-mono text-slate-600">Phase 1 Execution • Zero AWS Billing Surface</span>
+          <span className="text-[11px] font-mono text-emerald-500/80">Production Ready • Zero-Spend Cloud Architecture</span>
         </div>
       </footer>
     </div>

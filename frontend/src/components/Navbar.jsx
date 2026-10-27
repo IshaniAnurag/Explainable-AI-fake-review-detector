@@ -20,9 +20,9 @@ export default function Navbar({ activeTab, setActiveTab }) {
               <h1 className="text-xl font-black tracking-tight bg-gradient-to-r from-white via-indigo-200 to-indigo-400 bg-clip-text text-transparent">
                 TrustLens<span className="text-indigo-500 font-extrabold">.XAI</span>
               </h1>
-              <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-indigo-400" />
-                Phase 1
+              <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
+                <Sparkles className="w-3 h-3 text-emerald-400" />
+                v1.0 Production
               </span>
             </div>
             <p className="text-xs text-slate-400 font-medium">Explainable Fake Review Detection System</p>

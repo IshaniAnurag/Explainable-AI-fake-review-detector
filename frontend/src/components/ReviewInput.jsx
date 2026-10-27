@@ -4,22 +4,22 @@ import { motion } from 'framer-motion';
 
 const SAMPLES = [
   {
-    label: "Fake Review (Spam Praise)",
-    text: "THIS IS ABSOLUTELY AMAZING! Best product ever created! 10/10 must buy right now! Incredible quality!",
+    label: "Synthetic / Fake Review (CG)",
+    text: "Really nice case. The clear plastic has a nice feel and it works very well. I will definitely keep this item and recommend it.",
     type: "fake",
     icon: AlertOctagon,
     color: "from-rose-500/20 to-orange-500/20 border-rose-500/30 text-rose-300 hover:border-rose-400"
   },
   {
-    label: "Genuine Review (Grounded)",
-    text: "I bought this pair of shoes 3 months ago. The leather feels durable and fits well, though the box arrived slightly dented.",
+    label: "Authentic / Genuine Review (OR)",
+    text: "I bought this pair of shoes 3 months ago. The leather feels durable and fits well, though the heel rubbed slightly for the first two days.",
     type: "genuine",
     icon: CheckCircle2,
     color: "from-emerald-500/20 to-teal-500/20 border-emerald-500/30 text-emerald-300 hover:border-emerald-400"
   },
   {
-    label: "Ambiguous Sample (Mixed)",
-    text: "Product is fine for the price. Not terrible but definitely not the highest quality either.",
+    label: "Ambiguous Review (Mixed)",
+    text: "Product is fine for the price. Not terrible but definitely not high quality either.",
     type: "ambiguous",
     icon: HelpCircle,
     color: "from-amber-500/20 to-yellow-500/20 border-amber-500/30 text-amber-300 hover:border-amber-400"

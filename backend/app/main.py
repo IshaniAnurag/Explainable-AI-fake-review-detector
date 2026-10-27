@@ -1,20 +1,20 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List, Dict, Any
+from mangum import Mangum
 
 from app.schemas import ReviewInput, PredictResponse, ExplainResponse, HealthResponse
 from app.model_loader import model_loader
 from app.storage import storage_service
 
-# PHASE 2: In Phase 2 AWS migration, wrap this app instance with Mangum:
-# from mangum import Mangum
-# handler = Mangum(app)
-
 app = FastAPI(
-    title="Explainable AI Fake Review Detection API",
-    description="Backend API serving DistilBERT predictions, SHAP token attributions, and review logging.",
+    title="TrustLens XAI — Explainable Fake Review Detection API",
+    description="Enterprise serverless backend serving sequence classification, token attributions, and audit logging.",
     version="1.0.0"
 )
+
+# Serverless ASGI adapter for AWS Lambda
+handler = Mangum(app)
 
 # CORS Middleware configuration
 app.add_middleware(
@@ -31,7 +31,7 @@ def health_check():
     return {
         "status": "healthy",
         "model_loaded": model_loader.is_loaded,
-        "storage_type": "SQLite (Phase 1 Local)",  # PHASE 2: swap to "DynamoDB (Phase 2)"
+        "storage_type": "DynamoDB / SQLite Unified Adapter",
         "version": "1.0.0"
     }
 

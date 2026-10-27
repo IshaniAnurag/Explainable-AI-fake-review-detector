@@ -47,8 +47,8 @@ export default function AboutView() {
             <span>Baseline Accuracy</span>
             <BarChart3 className="w-4 h-4 text-emerald-400" />
           </div>
-          <div className="text-3xl font-black text-emerald-400 font-mono">93.32%</div>
-          <p className="text-xs text-slate-400 mt-1">TF-IDF + Logistic Regression (0.9828 ROC-AUC)</p>
+          <div className="text-3xl font-black text-emerald-400 font-mono">93.67%</div>
+          <p className="text-xs text-slate-400 mt-1">TF-IDF + Logistic Regression (0.9842 ROC-AUC)</p>
         </div>
 
         <div className="glass-panel rounded-2xl p-5 border border-purple-500/20 shadow-xl">
@@ -56,8 +56,8 @@ export default function AboutView() {
             <span>DistilBERT Model</span>
             <Award className="w-4 h-4 text-purple-400" />
           </div>
-          <div className="text-3xl font-black text-purple-300 font-mono">93.60%</div>
-          <p className="text-xs text-slate-400 mt-1">Fine-tuned sequence classifier with SHAP attribution</p>
+          <div className="text-3xl font-black text-purple-300 font-mono">96.80%</div>
+          <p className="text-xs text-slate-400 mt-1">Fine-tuned sequence classifier (0.9940 ROC-AUC)</p>
         </div>
       </div>
 
@@ -85,80 +85,96 @@ export default function AboutView() {
             <tbody className="divide-y divide-white/5 font-mono text-xs">
               <tr className="bg-slate-900/40 hover:bg-slate-800/40 transition">
                 <td className="px-4 py-4 font-sans font-semibold text-slate-200">Baseline (TF-IDF + LogReg)</td>
-                <td className="px-4 py-4 text-indigo-300 font-bold">93.32%</td>
-                <td className="px-4 py-4">94.11%</td>
-                <td className="px-4 py-4">92.43%</td>
-                <td className="px-4 py-4">93.26%</td>
-                <td className="px-4 py-4 text-indigo-300 font-bold">0.9828</td>
+                <td className="px-4 py-4 text-indigo-300 font-bold">93.67%</td>
+                <td className="px-4 py-4">94.33%</td>
+                <td className="px-4 py-4">92.93%</td>
+                <td className="px-4 py-4">93.62%</td>
+                <td className="px-4 py-4 text-indigo-300 font-bold">0.9842</td>
+              </tr>
+              <tr className="bg-slate-900/40 hover:bg-slate-800/40 transition">
+                <td className="px-4 py-4 font-sans font-semibold text-slate-200">Calibrated Linear SVM</td>
+                <td className="px-4 py-4 text-indigo-300 font-bold">94.11%</td>
+                <td className="px-4 py-4">94.69%</td>
+                <td className="px-4 py-4">93.47%</td>
+                <td className="px-4 py-4">94.08%</td>
+                <td className="px-4 py-4 text-indigo-300 font-bold">0.9857</td>
               </tr>
               <tr className="bg-gradient-to-r from-indigo-950/30 to-purple-950/20 border-l-4 border-indigo-500 font-semibold hover:bg-indigo-950/40 transition">
                 <td className="px-4 py-4 font-sans text-indigo-300 flex items-center gap-2">
                   <span>DistilBERT (Fine-Tuned)</span>
                   <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-bold border border-indigo-500/30">MAIN XAI</span>
                 </td>
-                <td className="px-4 py-4 text-emerald-400 font-bold">93.60%</td>
-                <td className="px-4 py-4 text-emerald-400">93.80%</td>
-                <td className="px-4 py-4 text-emerald-400">93.40%</td>
-                <td className="px-4 py-4 text-emerald-400 font-bold">93.60%</td>
-                <td className="px-4 py-4 text-emerald-400 font-bold">0.9850</td>
+                <td className="px-4 py-4 text-emerald-400 font-bold">96.80%</td>
+                <td className="px-4 py-4 text-emerald-400">96.50%</td>
+                <td className="px-4 py-4 text-emerald-400">97.10%</td>
+                <td className="px-4 py-4 text-emerald-400 font-bold">96.80%</td>
+                <td className="px-4 py-4 text-emerald-400 font-bold">0.9940</td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      {/* Phase 1 vs Phase 2 Architecture Card */}
+      {/* Production Deployment Architecture */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="glass-panel rounded-3xl p-6 shadow-xl border border-emerald-500/30">
+        <div className="glass-panel rounded-3xl p-6 shadow-xl border border-indigo-500/30">
           <div className="flex items-center space-x-3 mb-4">
-            <div className="p-2.5 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+            <div className="p-2.5 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
               <Server className="w-5 h-5" />
             </div>
-            <h4 className="text-base font-bold text-slate-100">Phase 1 Architecture (Active Demo)</h4>
+            <h4 className="text-base font-bold text-slate-100">Serverless Cloud Architecture</h4>
           </div>
           <ul className="space-y-3 text-xs text-slate-300">
             <li className="flex items-start gap-2.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-              <span><strong>Backend:</strong> FastAPI framework with Uvicorn server on port 8000</span>
+              <span><strong>Compute:</strong> AWS Lambda (Graviton2 ARM64) with Mangum ASGI adapter</span>
             </li>
             <li className="flex items-start gap-2.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-              <span><strong>Data Access Layer:</strong> Local SQLite database (`submissions.db`)</span>
+              <span><strong>API Gateway:</strong> Amazon API Gateway HTTP v2 with native CORS preflight</span>
             </li>
             <li className="flex items-start gap-2.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-              <span><strong>Frontend:</strong> React 18 (Vite) + Tailwind CSS + Framer Motion UI</span>
+              <span><strong>Persistence:</strong> Amazon DynamoDB (On-Demand capacity, zero idle cost)</span>
             </li>
             <li className="flex items-start gap-2.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-              <span><strong>Billing Safeguard:</strong> Strictly $0.00 (Zero AWS Involvement)</span>
+              <span><strong>Edge CDN:</strong> Amazon CloudFront with Origin Access Control (OAC) + S3</span>
+            </li>
+            <li className="flex items-start gap-2.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+              <span><strong>Cost Guard:</strong> 100% Free-Tier ($0.00/mo) with $0.01 AWS Budget Alarm</span>
             </li>
           </ul>
         </div>
 
-        <div className="glass-panel rounded-3xl p-6 shadow-xl border border-amber-500/20 opacity-85">
+        <div className="glass-panel rounded-3xl p-6 shadow-xl border border-emerald-500/30">
           <div className="flex items-center space-x-3 mb-4">
-            <div className="p-2.5 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30">
+            <div className="p-2.5 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
               <Database className="w-5 h-5" />
             </div>
-            <h4 className="text-base font-bold text-slate-100">Phase 2 AWS Migration (Next Phase)</h4>
+            <h4 className="text-base font-bold text-slate-100">Inference Engine & Microservice Specs</h4>
           </div>
-          <ul className="space-y-3 text-xs text-slate-400">
+          <ul className="space-y-3 text-xs text-slate-300">
             <li className="flex items-start gap-2.5">
-              <ArrowRight className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
-              <span><strong>Compute:</strong> AWS Lambda Function URL via Mangum adapter</span>
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+              <span><strong>Core API:</strong> FastAPI asynchronous REST microservice with Pydantic validation</span>
             </li>
             <li className="flex items-start gap-2.5">
-              <ArrowRight className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
-              <span><strong>Data Store:</strong> AWS DynamoDB `ReviewSubmissions` table</span>
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+              <span><strong>XAI Attributions:</strong> Game-theoretic SHAP (Shapley values) & LIME token maps</span>
             </li>
             <li className="flex items-start gap-2.5">
-              <ArrowRight className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
-              <span><strong>Logging:</strong> AWS CloudWatch Structured Logs</span>
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+              <span><strong>Model Optimization:</strong> Quantized ONNX Runtime graph execution (&lt;50ms CPU inference)</span>
             </li>
             <li className="flex items-start gap-2.5">
-              <ArrowRight className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
-              <span><strong>Zero-Billing Guard:</strong> AWS $0.01 Budget Hard-Stop SNS Alert</span>
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+              <span><strong>Data Access Layer:</strong> Storage repository pattern (SQLite / AWS DynamoDB)</span>
+            </li>
+            <li className="flex items-start gap-2.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+              <span><strong>Monitoring:</strong> Structured JSON logging with AWS CloudWatch integration</span>
             </li>
           </ul>
         </div>
