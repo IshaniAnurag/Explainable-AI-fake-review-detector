@@ -26,6 +26,22 @@ backend/app/__pycache__/
 frontend/node_modules/
 frontend/dist/
 frontend/.venv/
+node_modules/
+dist/
+
+# Cloud & AWS SAM
+.aws-sam/
+samconfig.toml
+*.pem
+*.key
+credentials
+.dynamodb/
+
+# OS and IDE
 .ds_store
+.DS_Store
+Thumbs.db
 .vscode/
 .idea/
+*.swp
+
