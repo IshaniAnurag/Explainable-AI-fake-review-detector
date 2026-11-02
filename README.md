@@ -48,11 +48,16 @@ cloudproj/
 │   │   └── schemas.py       # Pydantic data schemas
 │   └── requirements.txt     # Python backend dependencies
 ├── frontend/                # React (Vite) + Tailwind CSS + Framer Motion UI
-├── results/                 # Empirical evaluation statistics and ablation tables
 ├── docs/
 │   ├── figures/             # 300 DPI PNG & vector SVG evaluation plots
-│   └── PAPER_BRIEF_FOR_CLAUDE.md  # Comprehensive IEEE conference paper brief
-├── .vscode/                 # VS Code one-click launch tasks
+│   └── RESEARCH_SPECIFICATION.md  # Comprehensive research & benchmark specification
+├── template.yaml            # AWS SAM serverless infrastructure template
+├── deploy_cloudshell.sh     # Automated Linux CloudShell deployment script
+├── deploy.ps1               # Automated Windows PowerShell deployment script
+├── teardown.ps1             # Automated cloud cleanup script
+├── TrustLens_XAI_IEEE_Paper_Cleaned.pdf  # 7-page camera-ready IEEE conference paper PDF
+├── TrustLens_XAI_Project_Report_And_Code_Dossier.pdf  # 18-page comprehensive project report & code dossier PDF
+├── DEPLOY.md                # Zero-cost cloud deployment guide
 └── README.md
 ```
 

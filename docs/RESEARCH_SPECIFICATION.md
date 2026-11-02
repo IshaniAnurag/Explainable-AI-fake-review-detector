@@ -1,20 +1,20 @@
-# IEEE Conference Paper Master Brief & Reference Document (`PAPER_BRIEF_FOR_CLAUDE.md`)
+# IEEE Conference Research Specification & Benchmark Report (RESEARCH_SPECIFICATION.md)
 
-> **Document Purpose:** This document is an exhaustive, self-contained, publication-ready research and technical brief designed to be handed to Claude (or any senior AI researcher/academic writer) to author a complete, camera-ready IEEE conference paper.
+> **Document Purpose:** This document provides the complete, self-contained academic research and technical specification for the TrustLens XAI framework.
 >
-> It contains all mathematical formulations, authentic empirical metrics (from the 40,432-row benchmark), ablation studies, qualitative explanation cases, system architectures, cloud infrastructure designs, cost models, and complete IEEE-formatted references. **No numbers, tables, or findings need to be fabricated.**
+> It documents all mathematical formulations, authentic empirical metrics (from the 40,432-row benchmark), ablation studies, qualitative explanation cases, system architectures, cloud infrastructure designs, cost models, and complete IEEE-formatted references.
 
 ---
 
-## Instructions for Claude (Paper Generation Directives)
+## Paper Organization & Editorial Standards
 
-When writing the full IEEE paper from this brief, please follow these conventions:
+The complete paper follows standard academic and publishing conventions:
 1. **Target Venue:** IEEE International Conference on Cloud Computing (CLOUD) / IEEE International Conference on Big Data / IEEE Transactions on Services Computing / IEEE Access.
-2. **Format & Style:** Follow the standard IEEE two-column, 10pt conference format (`\documentclass[conference]{IEEEtran}`).
+2. **Format & Style:** Follow the standard IEEE two-column, 10pt conference format (\documentclass[conference]{IEEEtran}).
 3. **Tone:** Formal, academic, authoritative, rigorous, and empirical.
-4. **Notation:** Use standard LaTeX mathematical notation for all equations (vectors in bold $\mathbf{x}$, matrices in uppercase $\mathbf{W}$, sets in calligraphic $\mathcal{S}$).
-5. **No Hallucinations:** Use only the empirical values, confusion matrices, ablation statistics, and latency benchmarks documented in Section V.
-6. **Structure:** Follow the standard 8-section IEEE organization:
+4. **Notation:** Standard LaTeX mathematical notation for all equations (vectors in bold $\mathbf{x}$, matrices in uppercase $\mathbf{W}$, sets in calligraphic $\mathcal{S}$).
+5. **Empirical Grounding:** Utilizes exact empirical values, confusion matrices, ablation statistics, and latency benchmarks documented in Section V.
+6. **Structure:** Follows standard 8-section IEEE organization:
    - Title, Abstract, Keywords
    - I. Introduction
    - II. Related Work
@@ -500,32 +500,19 @@ S.~Ram\'irez, ``FastAPI: Modern, fast (high-performance), web framework for buil
 
 ---
 
-## Suggested IEEE Paper Section Mapping (For Claude Prompting)
+## Paper Publication Status
 
-When prompting Claude to generate the final paper, use this prompt:
+The complete manuscript has been compiled and verified into a 7-page camera-ready IEEE conference format:
+- **PDF Document:** [TrustLens_XAI_IEEE_Paper_Cleaned.pdf](../TrustLens_XAI_IEEE_Paper_Cleaned.pdf)
+- **Comprehensive Project Dossier:** [TrustLens_XAI_Project_Report_And_Code_Dossier.pdf](../TrustLens_XAI_Project_Report_And_Code_Dossier.pdf)
+- **Source Code Repository:** [https://github.com/IshaniAnurag/Explainable-AI-fake-review-detector](https://github.com/IshaniAnurag/Explainable-AI-fake-review-detector)
 
-```text
-Please write a complete, publication-grade IEEE conference paper based on the attached document 'PAPER_BRIEF_FOR_CLAUDE.md'. 
 
-Follow these specific instructions:
-1. Target: Camera-ready IEEE Conference Paper format (two columns, formal academic style, complete with abstract, equations, architecture descriptions, ablation tables, and references).
-2. Use all empirical numbers from the brief:
-   - Dataset: 40,432 samples (32,345 train, 4,043 val, 4,044 held-out test).
-   - Logistic Regression: 93.67% accuracy, 0.9842 ROC-AUC (1,909 TN, 1,879 TP, 113 FP, 143 FN).
-   - Linear SVM: 94.11% accuracy, 0.9857 ROC-AUC (1,916 TN, 1,890 TP, 106 FP, 132 FN).
-   - DistilBERT: 96.80% accuracy, 0.9940 ROC-AUC.
-   - Include the full 8-setting TF-IDF ablation table and the dataset length table.
-3. Formulate all mathematical equations in LaTeX:
-   - TF-IDF equations.
-   - Logistic loss and SVM primal optimization.
-   - Multi-head self-attention and DistilBERT classification head.
-   - Cooperative game-theoretic SHAP Shapley values with the 4 axioms.
-   - LIME local surrogate objective.
-4. Provide a detailed Cloud Architecture section describing the serverless implementation on AWS:
-   - S3 + CloudFront (Origin Access Control) for frontend hosting.
-   - API Gateway HTTP API v2 + AWS Lambda (Mangum ASGI) + ONNX Runtime quantized CPU inference.
-   - DynamoDB On-Demand storage and CloudWatch monitoring with the $0.01 zero-spend budget guarantee.
-   - Include ASCII architecture and data flow diagrams.
-5. Include the qualitative XAI case studies (Cases 1, 2, and 3) showing exact token attribution behavior.
-6. Append the complete 12-item IEEE reference list.
-```
+---
+
+## Paper Publication Status
+
+The complete manuscript has been compiled and verified into a 7-page camera-ready IEEE conference format:
+- **PDF Document:** [TrustLens_XAI_IEEE_Paper_Cleaned.pdf](../TrustLens_XAI_IEEE_Paper_Cleaned.pdf)
+- **Comprehensive Project Dossier:** [TrustLens_XAI_Project_Report_And_Code_Dossier.pdf](../TrustLens_XAI_Project_Report_And_Code_Dossier.pdf)
+- **Source Code Repository:** [https://github.com/IshaniAnurag/Explainable-AI-fake-review-detector](https://github.com/IshaniAnurag/Explainable-AI-fake-review-detector)
